@@ -5,46 +5,81 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd 
 
-def isolateColumnData(data,col):
-	index = 0
-	result = list()
-	for row in data:
-		result.append(row.pop(col))		
-		index =+1
-	return result
-
-
+from pylab import plot,show
 
 #Create dataSets from CSVs
 prices = pd.read_csv('allMkt30d.csv')
 volume = pd.read_csv('allVol30d.csv')
 tradepm = pd.read_csv('tpmhrs30d.csv')
-newerData = pd.read_csv('price30d.csv')
+#newerData = pd.read_csv('price30d.csv')
 
 #Create DataFrames (np.ndarray)
-pdat     = prices.iloc[:,1:10].values
-voldat   = prices.iloc[:,1:10].values
-tradedat = prices.iloc[:,1:10].values
-
-p = pdat.tolist()
-v = voldat.tolist()
-t = tradedat.tolist()
+pdat     = prices.iloc[:,1:].values
+voldat   = volume.iloc[:,1:].values
+tradedat = tradepm.iloc[:,1:].values
+dates = prices.iloc[:,0].values
+priceParams = prices.iloc[0,:].values
+volParams   = volume.iloc[0,:].values
+tradeParams = tradepm.iloc[0,:].values
 
 #Get the Dimensions of the data sets 
+print(' *** Dimensions of Data Sets *** ')
 print('Price Data Points:')
 print(pdat.shape)
+print('Price Parameters:')
+print(priceParams.shape)
 print('Volume Data Points:')
 print(voldat.shape)
-print('Trades-Per_Minute Data Points:')
+print('Volume Parameters:')
+print(volParams.shape)
+print('Trades-Per-Minute Data Points:')
 print(tradedat.shape)
+print('Trades/Minute Parameters:')
+print(tradeParams.shape)
+print('Time Series Data Points: ')
+print(dates.shape)
+
+
+# Isolate history of individual markets for each dataset
+# Starting with columns of Price Data  
+rp0 = pdat[:,[0]] 
+rp1 = pdat[:,[1]]
+rp2 = pdat[:,[2]]
+rp3 = pdat[:,[3]]
+rp4 = pdat[:,[4]]
+rp5 = pdat[:,[5]]
+rp6 = pdat[:,[6]]
+rp7 = pdat[:,[7]]
+rp8 = pdat[:,[8]]
+# Isolate columns of Volume Data
+rv0 = voldat[:,[0]]
+rv1 = voldat[:,[1]]
+rv2 = voldat[:,[2]]
+rv3 = voldat[:,[3]]
+rv4 = voldat[:,[4]]
+rv5 = voldat[:,[5]]
+rv6 = voldat[:,[6]]
+rv7 = voldat[:,[7]]
+rv8 = voldat[:,[8]]
+# Isolate columns of TradesPerMin Data
+rt0 = tradedat[:,[0]]
+rt1 = tradedat[:,[1]]
+rt2 = tradedat[:,[2]]
+rt3 = tradedat[:,[3]]
+rt4 = tradedat[:,[4]]
+rt5 = tradedat[:,[5]]
+rt6 = tradedat[:,[6]]
+rt7 = tradedat[:,[7]]
+rt8 = tradedat[:,[8]]
+print("- Extracted 9 Columns of Price data ["+str(len(rp1)*9) +" points]")
+print("- Extracted 9 Columns of Volume data ["+str(len(rv0)*9)+" points]")
+print("- Extracted 9 Columns of Trades/Min data ["+str(len(rt0)*9)+" points]")
 #the 6mo data isnt loading correctly 
 #print('6 Month CoinBase History Data Points:')
 #print(cbdat.shape)
 
 
-#Isolate history of individual markets for each dataset 
-r0 = isolateColumnData(p,0)
-print(str(len(r0)) + " elements isolated from column 0")
+
 #Illustrate the data sets 
 fig, axes = plt.subplots(figsize = (10,10),nrows = 3, ncols = 1)
 prices.plot(ax = axes[0])
@@ -55,7 +90,21 @@ axes[0].set_title('30d Bitcoin Data')
 axes[0].set_ylabel('Prices')
 axes[1].set_ylabel('Volume')
 axes[2].set_ylabel('Trades/Minute')
-plt.show()
+axes[2].set_xlabel('Hours (Shared X-axis)')
+#plt.show()
 
-
+#Illustrating information about particular markets
+# starting with the first one arbitrarily 
+plt.figure(2)
+plt.subplot(311)
+plt.subplot(311).set_title('30d Market Summary: Bitfinex')
+plt.plot(rp0)
+plt.subplot(311).set_ylabel('Price 30d')
+plt.subplot(312)
+plt.plot(rv0)
+plt.subplot(312).set_ylabel('Volume 30d')
+plt.subplot(313)
+plt.plot(rt0)
+plt.subplot(313).set_ylabel('Trades/Min 30d')
+show()
 

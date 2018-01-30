@@ -14,6 +14,9 @@ On the Back end the program is using nearly 30k data points, from 3 different da
 covering 10 active BTC markets, which includes hourly information about the last 30days
 of Price, Volume and Trade-Per-Minute activity. 
 
+![alt text](https://raw.githubusercontent.com/TylersDurden/BTC/master/30dMarketSummaryBfnx.png)
+
+
 ## CSVtoTXT 
 This is useful because Python modules like Numpy work really well with .txt files
 and are also very powerful for visualization and mathematical analysis. This class
