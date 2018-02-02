@@ -1,11 +1,10 @@
  #!/usr/bin/env bash
- 
+cd /media/root/UNTITLED/BTC1.2/BTC/src/DataSets
  # Alt, to get Data from script for updating CSVs: 
-#curl -o last30d.csv http://data.bitcoinity.org/export_data.csv?c=e&currency=USD&data_type=price&r=hour&t=l&timespan=30d
-curl -o lastVol.csv http://data.bitcoinity.org/export_data.csv?c=e&currency=USD&data_type=volume&hour&r=hour&t=l&timespan=30d
-curl -o activity.csv http://data.bitcoinity.org/export_data.csv?c=e&currency=USD&data_type=tradespm&hour&r=hour&t=l&timespan=30d
+wget -o last30d.csv http://data.bitcoinity.org/export_data.csv?c=e&currency=USD&data_type=price&r=hour&t=l&timespan=30d
+wget -o lastVol.csv http://data.bitcoinity.org/export_data.csv?c=e&currency=USD&data_type=volume&hour&r=hour&t=l&timespan=30d
+wget -o activity.csv http://data.bitcoinity.org/export_data.csv?c=e&currency=USD&data_type=tradespm&hour&r=hour&t=l&timespan=30d
 
- 
 echo 'Creating a Recurrent Neural Network based on the following data sets: '
 ls | egrep '\.csv'$
 sleep 1
