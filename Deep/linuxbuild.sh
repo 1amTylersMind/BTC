@@ -8,7 +8,7 @@ pip install -U scikit-learn
 cd /media/root/UNTITLED/BTC1.2
 rm BTC
 git clone https://www.github.com/TylersDurden/BTC
-cd /media/root/UNTITLED/BTC1.2/BTC/
+cd /media/root/UNTITLED/BTC1.2/BTC/Deep
 chmod +x build.sh 
 su root ./build.sh 
 
