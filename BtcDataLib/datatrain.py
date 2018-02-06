@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import pandas as pd
 import statsmodels.api as sm
 import math
@@ -81,16 +82,18 @@ Create a MACD Oscillator Visual for Arbitrary 30d mkt data
 def createMACD(mktmap,mkt):
 	print('Creating MACD Oscillator for '+mkt)
 	df = pd.DataFrame(mktmap[mkt])		
+	dfprime = df.diff(periods=48,axis=0)	
 	macd = pd.ewma(mktmap[mkt],span=288)
 	bigmac = pd.ewma(mktmap[mkt],span=624)
-	gs = gridspec.GridSpec(2,1,height_ratios=[3,1])
+	weekmacd = pd.ewma(mktmap[mkt],span = 168)
+	# Make a plot
+	plt.style.use('bmh')
+	gs = gridspec.GridSpec(2,1,height_ratios=[3,1]) 	
 	plt.subplot(gs[0])
 	plt.title(mkt+' 30 Day ')
-	plt.plot(df)
+	plt.plot(df)	
 	plt.subplot(gs[1])
-	dfprime = df.diff(periods=72,axis=0)	
-	plt.plot(dfprime)
-	plt.plot(macd - bigmac,label='MACD')
+	plt.plot(weekmacd - macd,label='MACD')
 	plt.xlabel('Moving Average')
 	plt.show()
 
@@ -107,6 +110,7 @@ tradeParams = getMarketParameters('tpmhrs30d.csv')
 # Note that parameters are not in the same place
 # Between each Data Set variety 
 #Illustrate the data sets 
+plt.style.use('bmh')
 fig, axes = plt.subplots(figsize = (10,10),nrows = 3, ncols = 1)
 prices.plot(ax = axes[0])
 volume.plot(ax = axes[1])
@@ -150,9 +154,12 @@ def analyzeMarket(marketName):
 	pseries = pd.DataFrame(priceMap[marketName])
 	vseries = pd.DataFrame(volumeMap[marketName])
 	tseries = pd.DataFrame(tradeMap[marketName])
+	perr = pseries.std()
+	verr = vseries.std()
+	terr = tseries.std() 
 	xdata = np.linspace(0,718,1)
 	plt.figure(1)
-	
+	mpl.style.use('ggplot')
 	# Price Subplot
 	plt.subplot(311)
 	plt.ylabel('Prices')
@@ -170,6 +177,7 @@ def analyzeMarket(marketName):
 	plt.legend(handles=[])
 	# Trading volatility Subplot	
 	plt.subplot(313)
+	plt.style.use('bmh')
 	plt.plot(tseries,label='Trades/min')
 	plt.ylabel('Trades/Min')
 	plt.plot(pd.ewma(tseries,span=24),label='Moving Avg')
