@@ -4,8 +4,6 @@ import pandas as pd
 import statsmodels.api as sm
 import csv
 
-from matplotlib.finance import candlestick_ohlc
-
 # Three Main Historic DataSets [Price][Volume][Volatility]
 prices = pd.read_csv('allMkt30d.csv')
 volume = pd.read_csv('allVol30d.csv')
@@ -92,36 +90,23 @@ def analyzeMarket(marketName):
 	print(str(pseries.std(axis=None)))
 	#prcModel = sm.Logit(priceMap[marketName],np.arange(len(pseries)))
 	#volModel = sm.Logit(vseries,xdata)
-        #tpmModel = sm.Logit(tseries,xdata)
+    #tpmModel = sm.Logit(tseries,xdata)
 	#pfit = priceModel.fit()
 	#vfit = volModel.fit()
 	#tfit = tpmModel.fit()
 	
 	# Make plots 
-	#EWMA - Exponentially Weighted Moving Average 
-	ma = pd.ewma(pseries,span=24)
-	#pd.ewmstd(pseries,span=24).plot(style='k')
-	#pd.rolling_mean(pseries,span=24).plot(style='k--')
-	plt.plot(pseries,label="Price Data")
-	plt.plot(ma,label="Moving Avg.")
+	#pseries.plot()
+	pd.ewma(pseries,span=24).plot(style='k-')
+	plt.plot(pseries)
 	plt.title(marketName+' 30d Price')
-	plt.legend()
 	plt.show()
  	
-
-def constructNetworkWeightsByMkt(mktname,mktdata):
-	
-	return 
-
 
 # Map the three data sets by market
 priceMap = organizeMarketData(pdat,priceParams,1)
 volumeMap = organizeMarketData(vdat,volParams,2)
 tradeMap = organizeMarketData(tdat,tradeParams,3)
 
-# Analyze Markets
+# Analyze Bitfinex
 analyzeMarket('bitfinex')
-analyzeMarket('coinbase')
-
-# Find correlations between Mkt. ANN params [PVT]
-
