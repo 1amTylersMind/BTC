@@ -121,6 +121,26 @@ priceMap = organizeMarketData(pdat,priceParams,1)
 volumeMap = organizeMarketData(vdat,volParams,2)
 tradeMap = organizeMarketData(tdat,tradeParams,3)
 
-# Analyze Bitfinex
-analyzeMarket('bitfinex')
-analyzeMarket('coinbase')
+
+
+def main():
+	# Analyze Bitfinex
+	#analyzeMarket('bitfinex')
+	#analyzeMarket('coinbase')
+	#Allow User to instead select market
+	print('Select a Market to look at closer:')
+	index = 0
+	for mkt in priceParams:
+		print('[%i] - %s' % (index,mkt))
+		index += 1
+	running = True 
+	while(running):
+		selection = raw_input()
+		analyzeMarket(selection)
+		print('Enter: DONE to exit this module')
+		if (selection=='DONE'):
+			running = False
+
+
+if __name__ == '__main__':
+	main()
