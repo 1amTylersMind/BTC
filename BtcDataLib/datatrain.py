@@ -38,7 +38,18 @@ tradeParams = getMarketParameters('tpmhrs30d.csv')
 
 # Note that parameters are not in the same place
 # Between each Data Set variety 
-
+#Illustrate the data sets 
+fig, axes = plt.subplots(figsize = (10,10),nrows = 3, ncols = 1)
+prices.plot(ax = axes[0])
+volume.plot(ax = axes[1])
+tradepm.plot(ax = axes[2])
+#Add Labels 
+axes[0].set_title('30d Bitcoin Data')
+axes[0].set_ylabel('Prices')
+axes[1].set_ylabel('Volume')
+axes[2].set_ylabel('Trades/Minute')
+axes[2].set_xlabel('Hours (Shared X-axis)')
+plt.show()
 
 '''
 ORGANIZE DATASET BY MARKET
@@ -74,34 +85,36 @@ def sigmoid(x):
 	return 1/(1+math.exp(-x))
 
 
+
 '''
 Now Ready to make methods for analyzing by market
 '''
-def analyzeMarket(marketName):
-	#Make Models	
+def analyzeMarket(marketName):	
 	size = len(priceMap[marketName])+len(volumeMap[marketName])+len(tradeMap[marketName])
 	print(str(size)+' Points Colled on '+marketName)
 	pseries = pd.DataFrame(priceMap[marketName])
 	vseries = pd.Series(volumeMap[marketName])
 	tseries = pd.Series(tradeMap[marketName])
 	xdata = np.linspace(0,718,1)
-	
-	print(str(len(pseries))+' and '+ str(len(np.arange(len(pseries)))))
-	print(str(pseries.std(axis=None)))
-	#prcModel = sm.Logit(priceMap[marketName],np.arange(len(pseries)))
-	#volModel = sm.Logit(vseries,xdata)
-    #tpmModel = sm.Logit(tseries,xdata)
-	#pfit = priceModel.fit()
-	#vfit = volModel.fit()
-	#tfit = tpmModel.fit()
-	
-	# Make plots 
-	#pseries.plot()
-	pd.ewma(pseries,span=24).plot(style='k-')
+	plt.figure(1)
+	plt.subplot(311)
+	plt.ylabel('Prices')
+	plt.title(marketName+' 30d Data ')
+    	#Isolate user defined DataSets to Plot
 	plt.plot(pseries)
-	plt.title(marketName+' 30d Price')
+	plt.plot(pd.ewma(pseries,span=24))
+	plt.subplot(312)
+	plt.ylabel('Volume')
+   	plt.plot(vseries)
+   	plt.plot(pd.ewma(vseries,span=24))
+	plt.subplot(313)
+	plt.plot(tseries)
+	plt.ylabel('Trades/Min')
+	plt.plot(pd.ewma(tseries,span=24))
+	# Finally, show the plots 
 	plt.show()
  	
+
 
 # Map the three data sets by market
 priceMap = organizeMarketData(pdat,priceParams,1)
@@ -110,3 +123,4 @@ tradeMap = organizeMarketData(tdat,tradeParams,3)
 
 # Analyze Bitfinex
 analyzeMarket('bitfinex')
+analyzeMarket('coinbase')
