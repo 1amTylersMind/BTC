@@ -51,6 +51,9 @@ rp5 = pdat[:,[5]]
 rp6 = pdat[:,[6]]
 rp7 = pdat[:,[7]]
 rp8 = pdat[:,[8]]
+#Do Derivatives 
+rp0prime = pd.DataFrame(rp0)
+
 # Isolate columns of Volume Data
 rv0 = voldat[:,[0]]
 rv1 = voldat[:,[1]]
@@ -86,7 +89,7 @@ prices.plot(ax = axes[0])
 volume.plot(ax = axes[1])
 tradepm.plot(ax = axes[2])
 #Add Labels 
-axes[0].set_title('30d Bitcoin Data')
+axes[0].set_title('24hr Bitcoin Data')
 axes[0].set_ylabel('Prices')
 axes[1].set_ylabel('Volume')
 axes[2].set_ylabel('Trades/Minute')
@@ -97,14 +100,19 @@ axes[2].set_xlabel('Hours (Shared X-axis)')
 # starting with the first one arbitrarily 
 plt.figure(2)
 plt.subplot(311)
-plt.subplot(311).set_title('30d Market Summary: Bitfinex')
-plt.plot(rp0)
-plt.subplot(311).set_ylabel('Price 30d')
+plt.subplot(311).set_title('24Hr Market Summary: Bitfinex')
+plt.plot(rp0,label='Price')
+#plt.plot(rp0prime,label='dp/dt')
+#plt.plot(rp0,rp0prime,label='Price/derivative') 
+plt.subplot(311).set_ylabel('Price 24Hr')
 plt.subplot(312)
-plt.plot(rv0)
-plt.subplot(312).set_ylabel('Volume 30d')
+plt.plot(rv0,label='Vol')
+plt.subplot(312).set_ylabel('Volume 24Hr')
 plt.subplot(313)
-plt.plot(rt0)
-plt.subplot(313).set_ylabel('Trades/Min 30d')
+plt.plot(rt0,label='Trades/Min')
+plt.subplot(313).set_ylabel('Trades/Min 24Hr')
+
+#Now the derivs 
+#plt.plot(rp0prime.diff(periods=24, axis=0))
 show()
 
