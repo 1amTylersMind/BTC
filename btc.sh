@@ -1,13 +1,13 @@
 #!/bin/bash 
 cd /media/root/UNTITLED/PyFi/
-#sudo pip install numpy
-#sudo pip install matplotlib 
-#sudo pip install pandas
-#sudo pip install -U statsmodels
-#sudo pip install spyder
+sudo pip install numpy
+sudo pip install matplotlib 
+sudo pip install pandas
+sudo pip install -U statsmodels
+sudo pip install spyder
 echo '______________________________________'
 echo 'Python Libraries Installed'
-#git clone https://github.com/TylersDurden/BTC
+git clone https://github.com/TylersDurden/BTC
 sleep 5
 echo '** BTC Finiancial Analyis Repository Downloaded ** '
 cd BTC/BtcDataLib
@@ -35,4 +35,3 @@ echo 'Beginning Live Data Capture'
 cd ..
 chmod +x livecapt.sh
 su root ./livecapt.sh
-
