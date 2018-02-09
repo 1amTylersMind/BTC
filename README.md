@@ -4,7 +4,7 @@ Highs, Lows and Volume for a given 24hr window while
 continuously acquiring live orderbook data from 2 major
 Bitcoin exchanges. 
 
-![alt text](https://raw.githubusercontent.com/TylersDurden/BTC/master/ExampleFigure.png)
+![30 Day Data](https://raw.githubusercontent.com/TylersDurden/BTC/master/ExampleFigure.png)
 
 
 On the front end, this program uses 4 classes to collect, parse and organize live
@@ -14,7 +14,7 @@ On the Back end the program is using nearly 30k data points, from 3 different da
 covering 10 active BTC markets, which includes hourly information about the last 30days
 of Price, Volume and Trade-Per-Minute activity. 
 
-![alt text](https://raw.githubusercontent.com/TylersDurden/BTC/master/30dMarketSummaryBfnx.png)
+![24 Hr Data](https://raw.githubusercontent.com/TylersDurden/BTC/master/30dMarketSummaryBfnx.png)
 
 
 ## CSVtoTXT 
@@ -91,5 +91,7 @@ and perhaps the program could estimate a universal function common to all of the
 Totally a theory, not sure it would work.
 
 
-
+# Demo Build - Watch to see how to run this project for yourself 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=JLySP2X6L6g" target="_blank">
+<img src="http://img.youtube.com/vi/JLySP2X6L6g/0.jpg" alt="Build and Run Demo" width="240" height="180" border="10" /></a>
 
