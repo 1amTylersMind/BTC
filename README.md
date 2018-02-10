@@ -1,8 +1,8 @@
 # BTC 
-This package will both monitor the changes in overall 
-Highs, Lows and Volume for a given 24hr window while
-continuously acquiring live orderbook data from 2 major
-Bitcoin exchanges. 
+This projects attempts to use Historic Price, Volume and Trading Data along with live 
+Orderbook/Price data to make estimates on future prices. Continually adjusting to minimize 
+the error of the prediction, with the help of more and more live orderbook data, the quality
+of the predictions should become more precise. 
 
 ![30 Day Data](https://raw.githubusercontent.com/TylersDurden/BTC/master/ExampleFigure.png)
 
@@ -10,9 +10,9 @@ Bitcoin exchanges.
 On the front end, this program uses 4 classes to collect, parse and organize live
 market prices and orderbooks. 
 
-On the Back end the program is using nearly 30k data points, from 3 different data sets
+On the Back end the program is using nearly 60k data points, from 6 different data sets
 covering 10 active BTC markets, which includes hourly information about the last 30days
-of Price, Volume and Trade-Per-Minute activity. 
+of Price, Volume and Trade-Per-Minute activity, and minute-by-minute data from the last 24 hours. 
 
 ![24 Hr Data](https://raw.githubusercontent.com/TylersDurden/BTC/master/30dMarketSummaryBfnx.png)
 
