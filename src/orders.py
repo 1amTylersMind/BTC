@@ -1,13 +1,28 @@
-# Step 1 : Read in Orderbook.txt data
-# First 3 lines formatted: < [last,high,low,vol] mktName >
-# Then a single line denoting the name of the market followed
-# by its orderbook. (Only captures Bfnx and BStamp )
-
 
 def csvDataDump(data):
     f = open('trades.csv', "w")
     for line in data:
         f.write(line)
+
+
+def getContextualData():
+    f = open('dat.txt', "r")
+    index = 0
+    datadump = []
+    for line in f:
+        if 'bitfinex' in line:
+            if ',' in line:
+                datadump.append(line.split(' bitfinex')[0])
+        if 'coinbase' in line:
+            if ',' in line:
+                datadump.append(line.split(' coinbase')[0])
+        if 'bitstamp' in line:
+            if ',' in line:
+                datadump.append(line.split(' bitstamp')[0])
+        index += 1
+    f = open('context.csv', "w")
+    for ln in datadump:
+        f.write(ln + '\n')
 
 
 def main():
@@ -30,6 +45,7 @@ def main():
     # Now dump the Trade Data into a CSV for Analysis
     csvDataDump(trades)
     # Ok, So it is writing to the csv, but gotta clean it up.
+    getContextualData()
 
 
 if __name__ == '__main__':
