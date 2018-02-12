@@ -1,6 +1,6 @@
 # BTC 
 This project is an attempt at using real data to create a predictive algorithm for the 
-price movements of Bitcoin price. Predictions will rely on both historic and live data.
+price movements of Bitcoin. Predictions will rely on both historic and live data.
 
 ![30 Day Data](https://raw.githubusercontent.com/TylersDurden/BTC/master/ExampleFigure.png)
 
