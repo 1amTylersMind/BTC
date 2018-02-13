@@ -34,13 +34,33 @@ of previous bitcoin related data, in order to inform the program on how to make 
 price predictions based on the current orderbook of live exchanges topography. 
 
 Even more importantly, as the program continues to run it will acknowledge the accuracy of
-it's previous predictions. 
+it's previous predictions. Previous techniques have failed because they rely too heavily on
+past data for predictions. Bitcoin is extremely volatile, and clearly more attention must be
+paid to live information. I am going to try an entirely new predictive technique, borrowing 
+from some of the mathematics I learned from Quantum Mechanics!
 
 # Probabilistic Orderbook 
+ 
+The orders found on the books across major exchanges are indicative of not only the spread of
+prices, but the rapidity in which they're coming in. One can imagine that just after an official
+market price has been recorded, and buy/sell orders start coming in, that these bids represent a 
+sort of probabilistic cloud of where the future price will become next. With each successive moment
+a previous probabilistic model of potential market values is collapsed into a single true market price,
+opening up the potential for change again for next moment.  
 
-Previous techniques have failed because they rely too heavily on past data for predictions. 
-Instead, I am going to try an entirely new predictive technique, borrowing from some of the
-mathematics I learned from Quantum Mechanics! 
+Treating price points as expectation values of probabilistic STATEs (defined by prices making up an 
+orderbook), and considering a price as an expectation value of that state, I will treat the overall price 
+as a superposition of the various prices across orderbooks. To make an estimate as to how the system will 
+evolve over time, historic price information will be used to generate a constant used in the price equation.
+
+The resulting predictiction will instead be a series of potential paths, with unique probabilities for each.
+During the next time step the true price will be logged, and the program will remember the orderbook layout 
+for this resulting change to modify how Probabilities will be calculated in the future (for that price STATE). 
+
+I believe the most interesting aspect of this method of inquiry will be the ability to maximize the simple
+quantum equations of superposition to represent the distribution of order sizes, and their corresponding impact
+on the market, in precise way. Even more intersting will be to see how the program adapts, and hopefully becomes
+more precise, as it accumulates more orderbook information tethered to resulting price movements of the market. 
 
 # MORE TO COME! (Updates Daily)
 
