@@ -100,6 +100,8 @@ def main():
     getContextualData()
     # Now Start making predictions 
     context = pd.read_csv('context.csv')
+    print('Last Price: ')
+    print(pd.read_csv('context.csv').iloc[0,0].replace("[",""))
     trades = pd.read_csv('trades.csv')
     # get rid of brackets in context data! 
     # Analyze/Normalize trades 
@@ -113,7 +115,6 @@ def main():
     pdat[3] = trades.iloc[:,1].values
     # Use pdat to isolate the most important trades 
     #makeInitialPredictions(pdat)
-    print(pdat[1].mean)
     meanV = pdat[1].mean()
     maxV = pdat[1].max()
     predictions = {}
@@ -122,6 +123,7 @@ def main():
         if(t>meanV and t<=maxV):
             predictions[t] = pdat[2].get_value(index)
         index += 1
+    guess = (predictions[maxV] + pdat[2].mean())/2
     print('ESTIMATING NEXT PRICE AT: $%f' % predictions[maxV])
 
 
