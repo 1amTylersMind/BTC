@@ -6,7 +6,7 @@ javac Market.java
 javac Orderbook.java
 chmod +x orders.py
 chmod +x spyderNoteBook.py
-for i in {1..2}
+for i in {1..10}
 	do
 	touch orderbook.txt
 	java DataCollector > orderbook.txt
