@@ -1,25 +1,26 @@
 #!/bin/bash 
-cd /media/root/UNTITLED/PyFi/
-sudo pip install numpy
-sudo pip install matplotlib 
-sudo pip install pandas
-sudo pip install -U statsmodels
-sudo pip install spyder
+#sudo pip install numpy
+#sudo pip install matplotlib 
+#sudo pip install pandas
+#sudo pip install -U statsmodels
+#sudo pip install spyder
 echo '______________________________________'
 echo 'Python Libraries Installed'
-git clone https://github.com/TylersDurden/BTC
-sleep 5
+#git clone https://github.com/TylersDurden/BTC
+#sleep 5
+#cd BTC/BtcDataLib
 echo '** BTC Finiancial Analyis Repository Downloaded ** '
-cd BTC/BtcDataLib
+cd BtcDataLib
 echo '--------------------------------------'
 echo '   Potential Data Sets to Analyze:    |' 
 echo '--------------------------------------'
 ls | egrep '\.csv'$ 
 echo '--------------------------------------'
 chmod +x datatrain.py
+chmod +x script.py
 touch quietpython.txt
 # Analyze the 30day Data Sets
-python datatrain.py 
+python script.py
 sleep 2
 # Now Analyze the 24hr Data Sets
 echo '--------------------------------------'
@@ -34,4 +35,4 @@ sleep 1
 echo 'Beginning Live Data Capture'
 cd ..
 chmod +x livecapt.sh
-su root ./livecapt.sh
+#su root ./livecapt.sh
