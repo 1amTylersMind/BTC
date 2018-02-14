@@ -158,9 +158,7 @@ public class DataCollector {
 
                 //Check if orderbook was constructed properly
                 for (Map.Entry<Double, Double> entry : orders.entrySet()) {
-                    System.out.print("$" + entry.getValue() +
-                                     "," + entry.getKey()   +
-                                     " BTC\n");
+                    System.out.print(entry.getValue()+"," + entry.getKey()+"\n");
                     answer += (entry.getValue() + "," + entry.getKey() + '\n');
                 }
              }

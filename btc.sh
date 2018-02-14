@@ -35,4 +35,4 @@ sleep 1
 echo 'Beginning Live Data Capture'
 cd ..
 chmod +x livecapt.sh
-#su root ./livecapt.sh
+su root ./livecapt.sh

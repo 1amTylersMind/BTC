@@ -1,32 +1,84 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+
+Created on Thu Feb  8 15:07:26 2018
+@author: Scott Robbins
+@date: 2/8/2017
+"""
+# Imports 
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import math
 
 def csvDataDump(data):
     f = open('trades.csv', "w")
+    i = 0
     for line in data:
-        f.write(line)
+        if(i>2):
+            f.write(line)
+        i += 1
+    
 
 
 def getContextualData():
-    f = open('dat.txt', "r")
+    f = open('orderbook.txt', "r")
     index = 0
     datadump = []
     for line in f:
-        if 'bitfinex' in line:
-            if ',' in line:
-                datadump.append(line.split(' bitfinex')[0])
-        if 'coinbase' in line:
-            if ',' in line:
-                datadump.append(line.split(' coinbase')[0])
-        if 'bitstamp' in line:
-            if ',' in line:
-                datadump.append(line.split(' bitstamp')[0])
+        if(index == 0):
+        	datadump.append(line.split(' bitfinex')[0])
+        if(index == 1):
+            datadump.append(line.split(' coinbase')[0])
+        if(index == 2):
+            datadump.append(line.split(' bitstamp')[0])
         index += 1
     f = open('context.csv', "w")
     for ln in datadump:
         f.write(ln + '\n')
 
 
+def processTrades(orders):
+    pdat = orders.iloc[:,0].values
+    vdat = orders.iloc[:,1].values
+    runnable = False
+    if(len(pdat) == len(vdat)):
+        print('Correct Dimensions for Trading Analysis')
+        runnable = True
+    else:
+        print('Data has Incorrect Dimensions')
+    if(runnable):
+        pNorm = 0
+        vNorm = 0
+        for price in pdat:
+            pNorm += price **2
+        pNorm = 1/math.sqrt(pNorm)
+        for vol in vdat:
+            vNorm += vol**2
+        vNorm = 1/math.sqrt(vNorm)
+        print('Price Norm: %f \nVol Norm: %f' % (pNorm,vNorm))
+        pWeights = []
+        vWeights = []
+        for price in pdat:
+            pWeights.append(price*pNorm)
+        for vol in vdat:
+            vWeights.append(vol*vNorm)
+        p = []
+        v = []
+        for pr in pdat:
+            p.append(pr*pNorm)
+        for vo in vdat:
+            v.append(vo*vNorm)
+        P = np.array(p)
+        V = np.array(v)
+        return P,V
+    
+def makeInitialPredictions(dat):
+    
+        
 def main():
-    f = open('orderbook1.txt', 'r')
+    f = open('orderbook.txt', 'r')
     index = 0
     bfxStat = []
     cbStats = []
@@ -46,7 +98,20 @@ def main():
     csvDataDump(trades)
     # Ok, So it is writing to the csv, but gotta clean it up.
     getContextualData()
-
+    
+    # Now Start making predictions 
+    context = pd.DataFrame(pd.read_csv('context.csv').iloc[:,:].values)
+    trades = pd.DataFrame(pd.read_csv('trades.csv').iloc[:,:].values)
+    # get rid of brackets in context data! 
+    # Analyze/Normalize trades 
+    p, v  = processTrades(trades)
+    #Ok let's start making the master matrix 
+    pdat = pd.DataFrame(p)
+    pdat[1] = v
+    pdat[2] = trades.iloc[:,0].values
+    pdat[3] = trades.iloc[:,1].values
+    # Use pdat to isolate the most important trades 
+    makeInitialPredictions(pdat)
 
 if __name__ == '__main__':
     main()

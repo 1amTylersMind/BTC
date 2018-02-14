@@ -1,17 +1,19 @@
 #!/bin/bash
-pwd
+cd BtcDataLib
 javac DataCollector.java
 javac DataCleaner.java
+javac Market.java
+javac Orderbook.java
 chmod +x orders.py
-for i in {1..5}
+chmod +x spyderNoteBook.py
+for i in {1..2}
 	do
-	touch orderbook1.txt
-	java DataCollector > orderbook1.txt
+	touch orderbook.txt
+	java DataCollector > orderbook.txt
 	echo 'OrderBooks Captured and saved to:'
 	echo "$PWD./orderbook$i.txt"
 	java DataCleaner
-	sleep 1
 	python orders.py
 	sleep 10
-	mv orderbook1.txt "orderbook"$i".txt"
+	mv orderbook.txt "orderbook"$i".txt"
 done
