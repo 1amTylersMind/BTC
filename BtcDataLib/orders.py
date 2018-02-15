@@ -46,7 +46,7 @@ def processTrades(orders):
     vdat = orders.iloc[:,1].values
     runnable = False
     if(len(pdat) == len(vdat)):
-        print('Correct Dimensions for Trading Analysis')
+        #print('Correct Dimensions for Trading Analysis')
         runnable = True
     else:
         print('Data has Incorrect Dimensions')
@@ -59,7 +59,7 @@ def processTrades(orders):
         for vol in vdat:
             vNorm += vol**2
         vNorm = 1/math.sqrt(vNorm)
-        print('Price Norm: %f \nVol Norm: %f' % (pNorm,vNorm))
+        #print('Price Norm: %f \nVol Norm: %f' % (pNorm,vNorm))
         pWeights = []
         vWeights = []
         for price in pdat:
@@ -100,8 +100,7 @@ def main():
     getContextualData()
     # Now Start making predictions 
     context = pd.read_csv('context.csv')
-    print('Last Price: ')
-    print(pd.read_csv('context.csv').iloc[0,0].replace("[",""))
+    lastPrice = pd.read_csv('context.csv').iloc[0,0].replace("[","")
     trades = pd.read_csv('trades.csv')
     # get rid of brackets in context data! 
     # Analyze/Normalize trades 
@@ -124,8 +123,18 @@ def main():
             predictions[t] = pdat[2].get_value(index)
         index += 1
     guess = (predictions[maxV] + pdat[2].mean())/2
-    print('ESTIMATING NEXT PRICE AT: $%f' % predictions[maxV])
-
-
+    print('Last Price: $%s' % lastPrice)
+    print('Guess: $%f' % guess)
+    flp = float(lastPrice)
+    div = (flp - guess)/flp
+    print('Delta: %f' % div)
+    
+    # BACK PROPOGATION 
+    '''Look at past guesses in the results.txt files, 
+      and compare with the corresponding orderbook.txt files
+      then try to calc sums to be able to start comparing with
+      Historic P,V,T data. 
+    '''
+    
 if __name__ == '__main__':
     main()
