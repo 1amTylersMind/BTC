@@ -16,6 +16,7 @@ for i in {1..2}
 	touch results.txt
 	python orders.py > results.txt
 	cat results.txt
+	# Now if i>0 start backprop. by analyzing results  
 	sleep 10
 	mv orderbook.txt "orderbook"$i".txt"
 	mv results.txt "result"$i".txt"
