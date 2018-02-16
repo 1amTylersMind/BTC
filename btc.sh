@@ -1,15 +1,15 @@
 #!/bin/bash 
-sudo pip install numpy
-sudo pip install matplotlib 
-sudo pip install pandas
-sudo pip install -U statsmodels
-sudo pip install spyder
+#sudo pip install numpy
+#sudo pip install matplotlib 
+#sudo pip install pandas
+#sudo pip install -U statsmodels
+#sudo pip install spyder
 echo '______________________________________'
 echo 'Python Libraries Installed'
 #git clone https://github.com/TylersDurden/BTC
 #sleep 5
 #cd BTC/BtcDataLib
-cd /media/root/CoopersDB/BTC
+cd /media/root/CoopersDB/TESTBTC/BTC
 echo '** BTC Finiancial Analyis Repository Downloaded ** '
 cd BtcDataLib
 echo '--------------------------------------'

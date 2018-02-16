@@ -77,7 +77,9 @@ def processTrades(orders):
         
         return P,V
 
+
 def main():
+    # Now get the most recent orderbook
     f = open('orderbook.txt', 'r')
     index = 0
     bfxStat = []
@@ -93,7 +95,7 @@ def main():
             bsStats.append(line)
         if(',' in line):
             trades.append(line)
-    index += 1
+            index += 1
     # Now dump the Trade Data into a CSV for Analysis
     csvDataDump(trades)
     # Ok, So it is writing to the csv, but gotta clean it up.
@@ -129,12 +131,6 @@ def main():
     div = (flp - guess)/flp
     print('Delta: %f' % div)
     
-    # BACK PROPOGATION 
-    '''Look at past guesses in the results.txt files, 
-      and compare with the corresponding orderbook.txt files
-      then try to calc sums to be able to start comparing with
-      Historic P,V,T data. 
-    '''
-    
+ 
 if __name__ == '__main__':
     main()
