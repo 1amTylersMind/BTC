@@ -87,6 +87,7 @@ public class MarkovBook {
             
         }
         
+        /** <PROCESS+NORMALIZE_ORDERBOOK_DATA>*/
         public void normalizeState(){
             double max  = 0;
             double vtot = 0;
@@ -102,36 +103,115 @@ public class MarkovBook {
             }
             double pavg = ptot/State.rawOrders.size();
             double depth = maxp - minp;
-            System.out.println("Total: "+vtot+" BTC");
-            System.out.println("Largest order: "+max+" BTC");
-            System.out.println("Average Price: $"+pavg+" [+/-] $"+depth);
             
-            //Scale data and add weights  
+            /** <Basic_Info> Average, Max, Min, etc.  */
+            //System.out.println("Total: "+vtot+" BTC");
+            //System.out.println("Largest order: "+max+" BTC");
+            //System.out.println("Average Price: $"+pavg+" [+/-] $"+depth);
+            /** Scale data and add weights  */
             double norm = (1/Math.pow(State.rawOrders.size(),2));
-            //Create Volume weights 
+            /** Create Volume weights */ 
             Vector <Double> vWeights = new Vector<>();
             Map <Order,Double> statemap = new HashMap<>();
             double w = 0;
             int i = 0;
-            //Create weights and map them to their associated Orders 
+            /** <create_weights> and map them to their associated Orders */
             for(Order ord : State.rawOrders){w += (ord.volume*ord.volume);}
             for(Order o : State.rawOrders){vWeights.add(o.volume/norm);}
             for(Order order : State.rawOrders){statemap.put(order,vWeights.get(i));i++;}
             
             double diff = 0; double nowavg = 0;
-            for(Double p : State.lastPrices){nowavg += p; diff += (p-pavg);}
+            for(Double p : State.lastPrices){nowavg += p; diff += Math.abs(p-pavg);}
             diff/=lastPrices.size();
             double now = nowavg/State.lastPrices.size();
-            System.out.println("$"+now+" [+/-] $"+diff);
-            //Identify how average of the orderbooks compares to avg prices across 3 markets. 
+            //System.out.println("$"+now+" [+/-] $"+diff);
+            /** Identify how average of the orderbooks compares to avg prices across 3 markets. */
             if(diff>0){State.upward = true;}
             else{State.downward = true;}
             
-            //Start using the weights to create a normalized orderbook 
-            //of probabilities connected to their prices. Bin by ~$5
+             double p0 = (minp +(minp + diff/2))/2;  
+             double p1 = minp + diff/2;
+             double p2 = pavg;
+             double p3 = maxp-(diff/2);
             
+            /**Start using the weights to create a normalized orderbook 
+               of probabilities connected to their prices. <Bin_by_1/4s> */
+            Map<Double,Vector<Double>> histOrders = new HashMap<>();
+            double minbin = 0;   Vector<Double> mbin = new Vector<>();
+            double midmin = 0; Vector<Double> mdmnbn = new Vector<>();
+            double midbin = 0;  Vector<Double> mdbin = new Vector<>();
+            double upmidbn = 0; Vector<Double> umdbn = new Vector<>();
+            double upbn = 0;    Vector<Double> upbin = new Vector<>();
             
+            /** <Eigenstate> placeholders */
+            Vector<Order> e0 = new Vector<>();
+            Vector<Order> e1 = new Vector<>();
+            Vector<Order> e2 = new Vector<>();
+            Vector<Order> e3 = new Vector<>();
+            Map<Double,Vector<Order>> orderbookOperator = new HashMap<>();
             
+            //Iterate through orders! 
+            for(Order or : State.rawOrders){
+                /** <LOW_END_BIN>*/         
+                if(or.price>=minp && or.price<(minp+diff/2)){
+                    minbin = or.volume;
+                    if(or.volume>minbin){minbin = or.price;}
+                    mbin.add(or.price);   
+                    e0.add(or);
+                }/** <MID_LOW_BIN>*/
+                if(or.price>(minp+diff/2) && or.price<=(pavg)){
+                    midmin = or.volume;
+                    if(or.volume>midmin){minbin = or.price;}
+                    mdmnbn.add(or.price);
+                    e1.add(or);
+                }/** <UPPER_MID_BIN> */
+                if(or.price>pavg && or.price<=(maxp - diff/2)){
+                    midbin = or.volume;
+                    if(or.volume>midbin){midbin = or.price;}
+                    mdbin.add(or.price);
+                    e2.add(or);
+                }/** <UPPER_BIN> */
+                if(or.price>(pavg+diff/2) && or.price<=maxp){
+                    upbn = or.volume;
+                    if(or.volume>upbn){upbn = or.price;}
+                    upbin.add(or.price);
+                    e3.add(or);
+                }
+                   
+            }
+            /** put the vector of points picked up in these bounds/bins*/
+            histOrders.put(p0,mbin);
+            histOrders.put(p1,mdmnbn);
+            histOrders.put(p2,mdbin);
+            histOrders.put(p3,upbin);
+            orderbookOperator.put(p0,e0);
+            orderbookOperator.put(p1,e1);
+            orderbookOperator.put(p2,e2);
+            orderbookOperator.put(p3,e3);
+            
+            //System.out.println("____________________________STATES__________________________________");
+            System.out.println(p0+"|"+p1+"|"+p2 +"|"+ p3+"|");
+            int tot = mbin.size() + mdmnbn.size()+mdbin.size()+upbin.size();
+            System.out.println(mbin.size()+" + "+mdmnbn.size()+" + "+mdbin.size()+
+                                           " + "+upbin.size()+" = "+tot);
+           //System.out.println("____________________________________________");
+           
+           /** Now find which bin has the most <VOLUME> in its orders */
+           Vector<Double> bincounts = new Vector<>();
+           for(Map.Entry<Double,Vector<Order>>entry:orderbookOperator.entrySet()){
+               double sum = 0;
+               for( Order trade : entry.getValue()){sum += trade.volume;}
+               bincounts.add(sum);
+           }
+           //Compare sizes
+           if(bincounts.get(0)>bincounts.get(1) && bincounts.get(0)>bincounts.get(2) 
+              && bincounts.get(0)>bincounts.get(3)){System.out.println("Leaning towards $"+p0);}
+           if(bincounts.get(1)>bincounts.get(0) && bincounts.get(1)>bincounts.get(2)
+              && bincounts.get(1)>bincounts.get(3)){System.out.println("Leaning Towards $"+p1);}
+           if(bincounts.get(2)>bincounts.get(0) && bincounts.get(2)>bincounts.get(1)
+              && bincounts.get(2)>bincounts.get(3)){System.out.println("Leaning Towards $"+p2);}
+           if(bincounts.get(3)>bincounts.get(0) && bincounts.get(3)>bincounts.get(2)
+              && bincounts.get(3)>bincounts.get(1)){System.out.println("Leaning Towards $"+p3);}
             
         }
     }/** END of <MarkovBook.STATE>*/
