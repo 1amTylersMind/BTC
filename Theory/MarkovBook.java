@@ -44,6 +44,9 @@ public class MarkovBook {
         // Hold orderbook information with following structures
         public static Vector<Order> rawOrders = new Vector<>();
         public static Vector<Double> lastPrices = new Vector<>();
+        public static Map<Double,Vector<Order>> operator = new HashMap<>();
+        
+        public static Vector<Double> PVEC = new Vector<>();
         
         public static boolean upward;
         public static boolean downward;
@@ -83,12 +86,12 @@ public class MarkovBook {
             if(orders.size()>0){State.rawOrders = orders;}
             // Normalize the state, and then create 
             // new vector of Normalized orders  
-            normalizeState();
-            
+            MarkovBook.State.operator = createOperator();
+            normalizeOperator(MarkovBook.State.operator);
         }
         
         /** <PROCESS+NORMALIZE_ORDERBOOK_DATA>*/
-        public void normalizeState(){
+        public Map<Double,Vector<Order>> createOperator(){
             double max  = 0;
             double vtot = 0;
             double maxp = 0;
@@ -133,7 +136,10 @@ public class MarkovBook {
              double p1 = minp + diff/2;
              double p2 = pavg;
              double p3 = maxp-(diff/2);
-            
+             State.PVEC.add(p0);
+             State.PVEC.add(p1);
+             State.PVEC.add(p2);
+             State.PVEC.add(p3);
             /**Start using the weights to create a normalized orderbook 
                of probabilities connected to their prices. <Bin_by_1/4s> */
             Map<Double,Vector<Double>> histOrders = new HashMap<>();
@@ -196,14 +202,24 @@ public class MarkovBook {
                                            " + "+upbin.size()+" = "+tot);
            //System.out.println("____________________________________________");
            
-           /** Now find which bin has the most <VOLUME> in its orders */
+         return orderbookOperator;   
+        }
+        
+        /***/
+       public void normalizeOperator(Map<Double,Vector<Order>>orderbookOperator){
+             /** Now find which bin has the most <VOLUME> in its orders */
            Vector<Double> bincounts = new Vector<>();
            for(Map.Entry<Double,Vector<Order>>entry:orderbookOperator.entrySet()){
                double sum = 0;
                for( Order trade : entry.getValue()){sum += trade.volume;}
                bincounts.add(sum);
            }
-           //Compare sizes
+           //Pass in the Price Ranges that orderbook was divided into 
+           double p0 = State.PVEC.get(0);
+           double p1 = State.PVEC.get(1);
+           double p2 = State.PVEC.get(2);
+           double p3 = State.PVEC.get(3);
+           //Compare sizes of bins 
            if(bincounts.get(0)>bincounts.get(1) && bincounts.get(0)>bincounts.get(2) 
               && bincounts.get(0)>bincounts.get(3)){System.out.println("Leaning towards $"+p0);}
            if(bincounts.get(1)>bincounts.get(0) && bincounts.get(1)>bincounts.get(2)
@@ -212,8 +228,9 @@ public class MarkovBook {
               && bincounts.get(2)>bincounts.get(3)){System.out.println("Leaning Towards $"+p2);}
            if(bincounts.get(3)>bincounts.get(0) && bincounts.get(3)>bincounts.get(2)
               && bincounts.get(3)>bincounts.get(1)){System.out.println("Leaning Towards $"+p3);}
-            
-        }
+       }
+        
+        
     }/** END of <MarkovBook.STATE>*/
     
     public static class Order{
