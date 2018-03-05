@@ -5,7 +5,16 @@ import java.util.*;
 import java.util.regex.*;
 import java.math.*;
 
-/**Orderbooks are saved in this folder, as <Orderbook[i].txt> */
+/**Orderbooks are saved in this folder, as <Orderbook[i].txt> 
+This class will consider historic support/resistance and
+recent activity while considering the trades in an orderbook
+to make an estimate of the next market price posted. 
+
+By keeping track of the estimates made, and seeing how they
+compare with the true values, attempt to feed subsequent 
+value back into improve the precision of the next guess! 
+@author ScottRobbins
+*/
 public class MarkovBook {
     
     public int N;
@@ -13,8 +22,10 @@ public class MarkovBook {
     public MarkovBook(String nStates){
         
         this.N = Integer.parseInt(nStates);
-        
         createStates();
+        // Now refer to historical information to
+        //get some context on what these states
+        //represent for future price 
         
     }
     
