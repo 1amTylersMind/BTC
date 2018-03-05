@@ -119,9 +119,6 @@ public class MarkovBook {
             double depth = maxp - minp;
             
             /** <Basic_Info> Average, Max, Min, etc.  */
-            //System.out.println("Total: "+vtot+" BTC");
-            //System.out.println("Largest order: "+max+" BTC");
-            //System.out.println("Average Price: $"+pavg+" [+/-] $"+depth);
             /** Scale data and add weights  */
             double norm = (1/Math.pow(State.rawOrders.size(),2));
             /** Create Volume weights */ 
@@ -138,7 +135,6 @@ public class MarkovBook {
             for(Double p : State.lastPrices){nowavg += p; diff += Math.abs(p-pavg);}
             diff/=lastPrices.size();
             double now = nowavg/State.lastPrices.size();
-            //System.out.println("$"+now+" [+/-] $"+diff);
             /** Identify how average of the orderbooks compares to avg prices across 3 markets. */
             if(diff>0){State.upward = true;}
             else{State.downward = true;}
